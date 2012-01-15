@@ -14,7 +14,7 @@ module SourceGenerator
   def function_block(name, options = {})
     function_title = result_to_c(options[:result])
     function_title << name.to_s
-    function_title << (options[:args] ? arguments_to_c(options[:args]) : "()")
+    function_title << arguments_to_c(options[:args])
     if block_given?
       add_block(function_title){ yield }
     else
