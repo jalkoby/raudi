@@ -6,11 +6,6 @@ module CConverter
       c_result = ""
       c_result << "static " if result[:static]
       c_result << result[:type].to_s
-      if result[:array]
-        result[:array] = 1 unless result[:array].is_a?(Integer)
-        c_result << ("*" * result[:array])
-      end
-      c_result
     when nil
       "void"
     else
@@ -22,7 +17,14 @@ module CConverter
     argument_line = "("
     if params
       params = [params] unless params.is_a? Array
-      argument_line << params.map{|param| result_to_c(param) + param[:name]}.join(", ")
+      argument_line << params.map do |param|
+        argument = result_to_c(param)
+        if param[:array]
+          param[:array] = 1 unless param[:array].is_a?(Integer)
+          argument << ('*' * param[:array])
+        end
+        argument << param[:name].to_s
+      end.join(", ")
     end
     argument_line << ")"
   end

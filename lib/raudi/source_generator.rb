@@ -4,11 +4,16 @@ module SourceGenerator
 
   include CConverter
 
+  attr_accessor :current_block
+
   def add_block(head_code, &block)
-    block_code = code_line(head_code)
-    block_code << open_quote
-    block_code << block.call
-    block_code << close_quote
+    parent_block = current_block
+    self.current_block = ""
+    code_line(head_code)
+    open_quote
+    block.call
+    close_quote
+    self.current_block = parent_block + current_block
   end
 
   def function_block(name, options = {})
@@ -22,44 +27,8 @@ module SourceGenerator
     end
   end
 
-  def open_quote
-    quote = intendation + "{" + new_line
-    block_in
-    quote
-  end
 
-  def close_quote
-    block_out
-    intendation + "}" + new_line
-  end
 
-  def code_line(code)
-    intendation + code + new_line
-  end
 
-  def intend_count
-    @intend_count ||= 0
-  end
-
-  def intend_count=(value)
-    raise "Intendation is negative. Check all your block" if value < 0
-    @intend_count = value
-  end
-
-  def intendation
-    " " * 2 * intend_count
-  end
-
-  def block_in
-    self.intend_count +=1
-  end
-
-  def block_out
-    self.intend_count -=1
-  end
-
-  def new_line
-    "\n"
-  end
 
 end

@@ -1,5 +1,5 @@
 require 'raudi/action_processor'
-require 'raudi/avr_controller'
+require 'raudi/avr'
 
 module Raudi
 
