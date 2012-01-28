@@ -16,6 +16,18 @@ describe Raudi::AVR::Controller do
 
     end
 
+    context 'pin section' do
+
+      it 'set output pins' do
+        controller = klass.new :atmega_328 do |config|
+          config.output :d0, :d3, :c3, :u34
+          config.output b: [0,2,3]
+        end
+        controller.source.startup_ports.should == "DDRB |= 1 << 0 || 1 << 2 || 1 << 3;\nDDRD |= 1 << 0 || 1 << 3;"
+      end
+
+    end
+
   end
 
 end

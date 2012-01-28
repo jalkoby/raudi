@@ -1,0 +1,28 @@
+ports:
+  a:
+    0: 'GPIO'
+    1: 'GPIO'
+    2: 'GPIO'
+    3: 'GPIO'
+    4: 'GPIO'
+    5: 'GPIO'
+    6: 'GPIO'
+    7: 'GPIO'
+  b:
+    0: 'GPIO'
+    1: 'GPIO'
+    2: 'GPIO'
+    3: 'GPIO'
+    4: 'GPIO'
+    5: 'GPIO'
+    6: 'GPIO'
+    7: 'GPIO'
+  d:
+    0: 'GPIO'
+    1: 'GPIO'
+    2: 'GPIO'
+    3: 'GPIO'
+    4: 'GPIO'
+    5: 'GPIO'
+    6: 'GPIO'
+    7: 'GPIO'

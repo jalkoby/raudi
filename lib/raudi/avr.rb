@@ -6,21 +6,29 @@ module Raudi
 
     class << self
 
-      def common_modules
-        %w{alloca assert ctype errno inttypes math setjmp stdint stdio stdlib string}
+      attr_accessor :configuration
+
+      def configuration
+        @configuration ||= YAML.load_file("configuration/avr.yaml")
       end
 
-      def avr_modules
-        %w{boot cpufunc eeprom fuse interrupt io lock pgmspace power 
-          sfr_defs signature sleep version wdt}.map{|module_name| "avr/#{module_name}"}
-      end
-
-      def util_modules
-        %w{atomic crc16 delay delay_basic parity setbaud twi}.map{|module_name| "util/#{module_name}"}
+      def method_missing(name, *args)
+        if result = configuration[name]
+          result
+        else
+          super(name, *args)
+        end
       end
 
       def modules
-        common_modules + avr_modules + util_modules
+        @modules ||= begin
+          hash_list = configuration['modules']
+          collection = list.delete(:common).split
+          hash_list.each do |namespace_name, namespace_modules|
+            collection << namespace_modules.split.map{|module_name| "#{namespace_name}/#{module_name}"}
+          end
+          collection
+        end
       end
 
     end

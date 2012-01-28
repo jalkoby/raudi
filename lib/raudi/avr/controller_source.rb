@@ -1,8 +1,10 @@
+require "raudi/avr/source"
+
 module Raudi
 
   module AVR
 
-    class ControllerSource
+    class ControllerSource < Source
       
       def initialize(controller)
         @controller = controller
@@ -10,7 +12,7 @@ module Raudi
 
       def modules
         @controller.modules.inject("") do |source, module_name|
-          source << "#include <#{module_name}.h>\n"
+          source << "#include <#{module_name}.h>#{new_line}"
         end
       end
 
