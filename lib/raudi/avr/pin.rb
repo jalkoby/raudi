@@ -1,35 +1,47 @@
-require 'yaml'
+require 'forwardable'
+require 'raudi/avr/info'
 
 module Raudi
 
   module AVR
 
     class Pin
+
+      extend Forwardable
       
-      attr_accessor :number, :states
+      attr_accessor :port, :number, :states, :current_state
 
-      class << self
+      def_delegator :port, :name
 
-        def valid_types
-          {
-            "GPIO" => %w{}
-          }
+      Info.pin_states.each do |state|
+        define_method "#{state}!" do
+          raise "Pin #{name}#{number} can be #{state}" unless states.include?(state)
+          self.current_state = state 
         end
+      end
 
-        def type_names
-          valid_types.map(&:first)
-        end
+      def initialize(port, number, types)
+        self.port = port
+        self.number = number
+        load_states(types)
+      end
 
-        def state_names
-          valid_types.map(&:last).flatten
-        end
+      def current_state
+        @current_state ||= states.first
+      end
+
+      def to_s
 
       end
 
+      private
 
-      def initialize(number, states)
-        self.number = number
-        self.states = states.split(',')
+      def load_states(types)
+        self.states = types.split.map do |type|
+          states = Info.pin_types[type]
+          raise "Unsupported type '#{type}'" unless states
+          states
+        end.flatten
       end
 
     end

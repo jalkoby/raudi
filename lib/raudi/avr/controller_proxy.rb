@@ -1,3 +1,5 @@
+require 'raudi/avr/info'
+
 module Raudi
 
   module AVR
@@ -10,7 +12,7 @@ module Raudi
         self.controller = controller
       end
 
-      def modules(*args)
+      def headers(*args)
         args.each do |param|
           case param
           when String
@@ -20,30 +22,16 @@ module Raudi
           else
             next
           end
-          controller.modules << param if allow_module?(param)
+          controller.headers << param if allow_header?(param)
         end
       end
 
       def output(*args)
-        args.each do |arg|
-          case arg
-          when Symbol, String
-            port_name = arg[/[a-z]+/i]
-            raise "Port is not specified" unless port_name
-            port_name.upcase!
-            pin_number = arg[/\d+/]
-            raise "Pin is not specified" unless pin_number
-            controller.ports.each do |port|
-              if port.name == port_name
-                port.pins.each do |pin|
-                  if pin.number == pin_number
-                    pin.output!
-                  end
-                end
-              end
-            end
-          end
-        end
+        set_pin_mode(*args){|pin| pin.output!}
+      end
+
+      def pullup(*args)
+        set_pin_mode(*args){|pin| pin.pullup!}
       end
 
       def method_missing(method_name, *args)
@@ -56,8 +44,22 @@ module Raudi
 
       private
 
-      def allow_module?(module_name)
-        AVR.modules.include?(module_name) and !controller.modules.include?(module_name)
+      def allow_header?(name)
+        Info.headers.include?(name) and !controller.headers.include?(name)
+      end
+
+      def set_pin_mode(*args, &block)
+        args.each do |arg|
+          port_name = arg[/[a-z]+/i]
+          raise "Port is not specified" unless port_name
+          pin_number = arg[/\d+/]
+          raise "Pin is not specified" unless pin_number
+          port = controller.ports(port_name)
+          raise "Port #{port_name} doesn't exists in controller" unless port
+          pin = port.pins(pin_number)
+          raise "Pin #{pin_number} doesn't exists in port #{port_name}" unless pin
+          block.call(pin)
+        end
       end
     end
 

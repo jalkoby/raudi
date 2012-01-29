@@ -8,10 +8,12 @@ describe Raudi::AVR::Controller do
       
       it 'specifing libs' do
         controller = klass.new :atmega_328 do |controller|
-          controller.modules :io, 'foo_module', 'util/twi'
-          controller.modules :wazza, 'math', 'avr/io'
+          controller.headers :io, 'foo_module', 'util/twi'
+          controller.headers :wazza, 'math', 'avr/io'
         end
-        controller.source.modules.should == "#include <avr/io.h>\n#include <util/twi.h>\n#include <math.h>\n"
+        controller.headers.should have(3).items
+        controller.headers.should include('avr/io')
+        controller.to_c.should include("#include <avr/io.h>\n#include <util/twi.h>\n#include <math.h>\n")
       end
 
     end
@@ -20,10 +22,23 @@ describe Raudi::AVR::Controller do
 
       it 'set output pins' do
         controller = klass.new :atmega_328 do |config|
-          config.output :d0, :d3, :c3, :u34
-          config.output b: [0,2,3]
+          config.output :d0, :d3
+          config.output :b0, :b2, :b3
         end
-        controller.source.startup_ports.should == "DDRB |= 1 << 0 || 1 << 2 || 1 << 3;\nDDRD |= 1 << 0 || 1 << 3;"
+        controller.ports(:d).output_pins.should have(2).items
+        controller.ports(:b).output_pins[0].number.should == 0
+        controller.to_c.should include("DDRB |= 1 << 0 || 1 << 2 || 1 << 3;")
+        controller.to_c.should include("DDRD |= 1 << 0 || 1 << 3;")
+      end
+
+      it 'set pin to pullup' do
+        controller = klass.new :atmega_328 do |config|
+          config.pullup :a3, :a5, :b5
+        end
+        controller.ports(:a).should have(2).pullup_pins
+        controller.ports(:b).should have(1).pullup_pins
+        controller.to_c.should include("PORTB |= 1 << 5;")
+        controller.to_c.should include("PORTA |= 1 << 3 || 1 << 5;")
       end
 
     end
@@ -31,3 +46,4 @@ describe Raudi::AVR::Controller do
   end
 
 end
+

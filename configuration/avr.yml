@@ -1,6 +1,6 @@
-modules:
+headers:
   avr: 'boot cpufunc eeprom fuse interrupt io lock pgmspace power sfr_defs signature sleep version wdt'
   common: 'alloca assert ctype errno inttypes math setjmp stdint stdio stdlib string'
   util: 'atomic crc16 delay delay_basic parity setbaud twi'
-types:
+pin_types:
   GPIO: 'input pullup output'
