@@ -4,3 +4,7 @@ headers:
   util: 'atomic crc16 delay delay_basic parity setbaud twi'
 pin_types:
   GPIO: 'input pullup output'
+  EINT: 'eint_0 eint_1'
+interrupts:
+  eint_0: 'INT0_vect'
+  eint_1: 'INT1_vect'

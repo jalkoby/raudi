@@ -26,6 +26,10 @@ module Raudi
         end
       end
 
+      def eint(*args)
+        set_interrupt(*args){|pin| pin.eint!}
+      end
+
       def output(*args)
         set_pin_mode(*args){|pin| pin.output!}
       end
@@ -61,6 +65,15 @@ module Raudi
           block.call(pin)
         end
       end
+
+      def set_interrupt(*args, &block)
+        set_pin_mode(*args) do |pin|
+          headers :interrupt
+          controller.with_interrupt = true
+          block.call(pin)
+        end
+      end
+
     end
 
   end

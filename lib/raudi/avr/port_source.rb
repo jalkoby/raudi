@@ -1,4 +1,5 @@
 require 'raudi/avr/source'
+require "raudi/avr/info"
 
 module Raudi
 
@@ -11,6 +12,10 @@ module Raudi
         case code_place
         when :main
           process_gpio
+        when :interrupts
+          port.eint_pins.each do |pin|
+            interrupt_block Info.interrupts[pin.state]
+          end
         end
         super()
       end

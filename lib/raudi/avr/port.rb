@@ -13,10 +13,14 @@ module Raudi
 
       attr_accessor :name, :pins
 
-      Info.pin_states.each do |state|
-        define_method "#{state}_pins" do
-          pins.select{|pin| pin.current_state == state}
+      Info.common_pin_states.each do |common_state|
+        define_method "#{common_state}_pins" do
+          pins.select{|pin| pin.send("#{common_state}?")}
         end
+      end
+
+      def eint_pins
+        pins.select{|pin| pin.state.include?('eint')}
       end
 
       def initialize(name, pins)

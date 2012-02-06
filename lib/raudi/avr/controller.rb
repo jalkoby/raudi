@@ -12,13 +12,13 @@ module Raudi
       
       include WithSource
 
-      attr_accessor :model_name, :headers, :ports
+      attr_accessor :model_name, :headers, :ports, :with_interrupt
       
       def initialize(model_name)
         self.model_name = model_name
         load_configuration_file
         self.headers = []
-        yield ControllerProxy.new(self)
+        yield ControllerProxy.new(self) if block_given?
         Raudi.controller = self
       end
 

@@ -54,6 +54,12 @@ module Raudi
         block_out 
       end
 
+      def interrupt_block(vector_name, &block)
+        interrupt_header = "ISR(#{vector_name})"
+        code_block(interrupt_header, &block)
+        new_line
+      end
+
       def block_in
         code_line '{', skip_semicolon: true 
         self.indent_count += 1

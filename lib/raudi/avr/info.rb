@@ -11,7 +11,7 @@ module Raudi
         end
 
         def method_missing(name, *args)
-          if result = configuration[name]
+          if result = configuration[name.to_s]
             result
           else
             super(name, *args)
@@ -38,8 +38,18 @@ module Raudi
           end
         end
 
-        def pin_states
-          @pin_states ||= pin_types.map{|type, states| states}.flatten
+        def pin_states(&block)
+          pin_types.map do |type, states| 
+            if block
+              states.map{|state| block.call(state)}
+            else
+              states
+            end
+          end.flatten.uniq.compact
+        end
+
+        def common_pin_states
+          pin_states {|pin_state| pin_state.gsub(/_\d+$/, "")}
         end
 
         private
