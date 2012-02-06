@@ -2,9 +2,13 @@ headers:
   avr: 'boot cpufunc eeprom fuse interrupt io lock pgmspace power sfr_defs signature sleep version wdt'
   common: 'alloca assert ctype errno inttypes math setjmp stdint stdio stdlib string'
   util: 'atomic crc16 delay delay_basic parity setbaud twi'
-pin_types:
-  GPIO: 'input pullup output'
-  EINT: 'eint_0 eint_1'
+
+gpio_states: 'input pullup output'
+specific_pin_states: 'int pcint'
+
 interrupts:
-  eint_0: 'INT0_vect'
-  eint_1: 'INT1_vect'
+  events:
+    rising: '1 1'
+    falling: '0 1'
+    both: '1 0'
+    low: '0 0'

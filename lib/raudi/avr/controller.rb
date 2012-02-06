@@ -36,7 +36,7 @@ module Raudi
         path = 'configuration'
         path << "/#{model_name}.yml"
         raise "Unknow controller model" unless File.exist?(path)
-        ports = YAML.load_file(path)['ports']
+        ports = YAML.load_config_file(path)['ports']
         raise "Internal error, configuration file is invalid" unless ports.is_a?(Hash)
         self.ports = ports.map {|port_name, pins| Port.new(port_name, pins)}
       end

@@ -9,27 +9,28 @@ describe Raudi::AVR::ControllerSource do
   context 'generate pgio config' do
     
     it 'output pins' do
-      config.output :b2, :a3, :b5, :d2
-      source.should include("DDRA |= 1 << 3;")
-      source.should include("DDRB |= 1 << 2 || 1 << 5;")
+      config.output :b2, :c3, :b5, :d2
+      source.should include("DDRC |= 1 << 3;")
+      source.should include("DDRB |= 1 << 2 | 1 << 5;")
       source.should include("DDRD |= 1 << 2;")
     end
 
     it 'pullup pins' do
-      config.pullup :a3, :b3, :b2, :b4
-      source.should include("PORTA |= 1 << 3;")
-      source.should include("PORTB |= 1 << 2 || 1 << 3 || 1 << 4;")
+      config.pullup :c3, :b3, :b2, :b4
+      source.should include("PORTC |= 1 << 3;")
+      source.should include("PORTB |= 1 << 2 | 1 << 3 | 1 << 4;")
     end
 
   end
 
   context 'code with interrupt' do
 
-    it 'eint' do
-      config.eint :b3
+    it 'external interrupt' do
+      config.external_interrupt :d2 => :rising
       source.should include('sei();')
       source.should include('ISR(INT0_vect)')
-      # source.should include('')
+      source.should include('GICR |= 1 << INT0;')
+      source.should include('MCUCR |= 1 << ISC00 | 1 << ISC01;')
     end
 
   end

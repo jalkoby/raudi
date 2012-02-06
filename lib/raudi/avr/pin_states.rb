@@ -3,28 +3,33 @@ module Raudi
   module AVR
 
     module PinStates
+
+      DELIMITER = '_'
       
       def self.included(klass)
         klass.class_eval do
-                    
-          Info.common_pin_states.each do |common_state|
 
-            define_method :get_state do |common_state|
-              states.detect{|state| state.include? common_state}
+          attr_accessor :states, :state, :state_params
+
+          Info.pin_states.each do |pin_state|
+
+            define_method :get_state do |pin_state|
+              states.detect{|state| state =~ Regexp.new("\\A#{pin_state}")}
             end
 
-            define_method :get_state! do |common_state|
-              valid_state = get_state(common_state)
-              raise "#{to_s} can be #{common_state}" unless valid_state
+            define_method :get_state! do |pin_state|
+              valid_state = get_state(pin_state)
+              raise "#{to_s} can be #{pin_state}" unless valid_state
               valid_state
             end
 
-            define_method "#{common_state}!" do
-              self.state = get_state!(common_state)
+            define_method "#{pin_state}!" do |*args|
+              self.state = get_state!(pin_state)
+              self.state_params = args.first
             end
 
-            define_method "#{common_state}?" do
-              self.state == get_state(common_state)
+            define_method "#{pin_state}?" do
+              self.state == get_state(pin_state)
             end
 
           end
@@ -32,26 +37,22 @@ module Raudi
       end
 
       def to_c
-        if Info.pin_types['GPIO'].include?(state)
+        if Info.gpio_states.include?(state)
           "PIN#{name}#{number}"
         else
-          state.to_s.upcase
+          state.to_s.gsub(DELIMITER, '').upcase
         end
+      end
+
+      def state_number
+        state.split(DELIMITER).last
       end
 
       private
 
-      def load_states(types)
-        self.states = types.split.map do |type|
-          if states = Info.pin_types[type]
-            states
-          else
-            raise "Unsupported type '#{type}'" unless Info.pin_states.include?(type)
-            type
-          end         
-        end.flatten
-
-        self.state = states.first
+      def load_states(states)
+        self.states = (Info.gpio_states + states).uniq
+        self.state = self.states.first
       end
 
     end

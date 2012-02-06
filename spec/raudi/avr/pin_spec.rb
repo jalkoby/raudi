@@ -11,7 +11,7 @@ describe Raudi::AVR::Pin do
     context 'as gpio' do
 
       before :each do 
-        @pin = Raudi::AVR::Pin.new(@port, 3, "GPIO")
+        @pin = Raudi::AVR::Pin.new(@port, 3, [])
       end
       
       it 'input' do
@@ -31,9 +31,9 @@ describe Raudi::AVR::Pin do
     end
 
     it 'as eint' do
-      @pin = klass.new(@port, 2, "GPIO eint_0")
-      @pin.eint!
-      @pin.to_c.should == "EINT_0"
+      @pin = klass.new(@port, 2, ["int_0"])
+      @pin.int!
+      @pin.to_c.should == "INT0"
     end
 
   end

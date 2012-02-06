@@ -11,7 +11,7 @@ module Raudi
       extend Forwardable
       include PinStates
 
-      attr_accessor :port, :number, :states, :state
+      attr_accessor :port, :number
 
       def_delegator :port, :name
 

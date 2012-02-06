@@ -84,7 +84,16 @@ module Raudi
 
       def indent_line
         "  " * indent_count 
-      end 
+      end
+
+      def write_bits(register_name, bits)
+        unless bits.empty?
+          source = register_name
+          source << " |= "
+          source << bits.map{|bit| "1 << #{bit}"}.join(" | ")
+          code_line(source)
+        end
+      end
 
     end
 

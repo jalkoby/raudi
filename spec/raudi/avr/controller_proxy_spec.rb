@@ -15,8 +15,8 @@ describe Raudi::AVR::ControllerProxy do
     end
 
     it 'define pullup pins' do
-      config.pullup :a3, :a5, :b5
-      controller.ports(:a).should have(2).pullup_pins
+      config.pullup :c3, :c5, :b5
+      controller.ports(:c).should have(2).pullup_pins
       controller.ports(:b).should have(1).pullup_pins
     end
 
@@ -52,9 +52,13 @@ describe Raudi::AVR::ControllerProxy do
   context 'define interrupts' do
 
     it 'with eint' do
-      config.eint :b3
+      config.external_interrupt :d2 => :falling, :d3 => :rising
       controller.with_interrupt.should be_true
-      controller.ports(:b).pins(3).state.should == 'eint_0'
+      port = controller.ports(:d)
+      port.interrupts.should include(:int)
+      pin = port.pins(3)
+      pin.should be_int
+      pin.state_params.should == :rising
       controller.headers.should include('avr/interrupt')
     end
 

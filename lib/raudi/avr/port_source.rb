@@ -12,27 +12,40 @@ module Raudi
         case code_place
         when :main
           process_gpio
+          process_int
         when :interrupts
-          port.eint_pins.each do |pin|
-            interrupt_block Info.interrupts[pin.state]
+          port.int_pins.each do |pin|
+            vector_name = "#{pin.to_c}_vect"
+            interrupt_block vector_name
           end
         end
         super()
       end
 
       def process_gpio
-        unless(output_pins = port.output_pins).empty?
-          source = "DDR#{port.name}"
-          source << " |= "
-          source << output_pins.map {|pin| "1 << #{pin.number}"}.join(' || ')
-          code_line source
+        register_name = "DDR#{port.name}"
+        bits = port.output_pins.map(&:number)
+        write_bits(register_name, bits)
+
+        register_name = "PORT#{port.name}"
+        bits = port.pullup_pins.map(&:number)
+        write_bits(register_name, bits)
+      end
+
+      def process_int
+        register_name = "MCUCR"
+        bits = port.int_pins.inject([]) do |bits, pin|
+          pair = Info.interrupt_event(pin.state_params)
+          pair.each_with_index do |bit_set, bit_number|
+            bits << "ISC#{pin.state_number}#{bit_number}" if bit_set
+          end
+          bits
         end
-        unless(pullup_pins = port.pullup_pins).empty?
-          source = "PORT#{port.name}"
-          source << " |= "
-          source << pullup_pins.map {|pin| "1 << #{pin.number}"}.join(' || ')
-          code_line source
-        end
+        write_bits(register_name, bits)
+
+        register_name = "GICR"
+        bits = port.int_pins.map(&:to_c)
+        write_bits(register_name, bits)
       end
 
     end

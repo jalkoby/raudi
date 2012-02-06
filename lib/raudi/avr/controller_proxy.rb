@@ -26,8 +26,15 @@ module Raudi
         end
       end
 
-      def eint(*args)
-        set_interrupt(*args){|pin| pin.eint!}
+      def external_interrupt(*args)
+        set_interrupt(*args) do |arg|
+          next unless arg.is_a?(Hash)
+          arg.each do |pin_name, interrupt_event|
+            pin = get_pin(pin_name)
+            pin.int!(interrupt_event)
+            pin.port.add_interrupt :int
+          end
+        end
       end
 
       def output(*args)
@@ -54,24 +61,28 @@ module Raudi
 
       def set_pin_mode(*args, &block)
         args.each do |arg|
-          port_name = arg[/[a-z]+/i]
-          raise "Port is not specified" unless port_name
-          pin_number = arg[/\d+/]
-          raise "Pin is not specified" unless pin_number
-          port = controller.ports(port_name)
-          raise "Port #{port_name} doesn't exists in controller" unless port
-          pin = port.pins(pin_number)
-          raise "Pin #{pin_number} doesn't exists in port #{port_name}" unless pin
-          block.call(pin)
+          block.call(get_pin(arg))
         end
       end
 
       def set_interrupt(*args, &block)
-        set_pin_mode(*args) do |pin|
+        args.each do |arg|
           headers :interrupt
           controller.with_interrupt = true
-          block.call(pin)
+          block.call(arg)
         end
+      end
+
+      def get_pin(pin_name)
+        port_name = pin_name[/[a-z]+/i]
+        raise "Port is not specified" unless port_name
+        pin_number = pin_name[/\d+/]
+        raise "Pin is not specified" unless pin_number
+        port = controller.ports(port_name)
+        raise "Port #{port_name} doesn't exists in controller" unless port
+        pin = port.pins(pin_number)
+        raise "Pin #{pin_number} doesn't exists in port #{port_name}" unless pin
+        pin
       end
 
     end
