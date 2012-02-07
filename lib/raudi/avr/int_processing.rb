@@ -7,7 +7,11 @@ module Raudi
       private
       
       def interrupts
-        int_pins.each { |pin| interrupt_block vector_name(pin.to_c) }
+        int_pins.each do |pin| 
+          interrupt_block vector_name(pin.to_c) do
+            code_lines action_source(pin.to_c)
+          end
+        end
       end
 
       def config

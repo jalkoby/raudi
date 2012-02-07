@@ -31,6 +31,8 @@ describe Raudi::AVR::ControllerSource do
       source.should include('ISR(INT0_vect)')
       source.should include('EIMSK |= 1 << INT0;')
       source.should include('EICRA |= 1 << ISC00 | 1 << ISC01;')
+      source.should include('int k;')
+      source.should include('for(k = 0; k < 4; k++);')
     end
 
     it 'falling' do

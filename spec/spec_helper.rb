@@ -8,6 +8,7 @@ module SupportHelpers
 
 end
 
+load('spec/test_actions.rb')
 
 RSpec.configure do |config|
   config.include SupportHelpers

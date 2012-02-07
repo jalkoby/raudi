@@ -1,4 +1,3 @@
-require 'forwardable'
 require 'raudi/avr/state_list'
 
 module Raudi
@@ -7,15 +6,9 @@ module Raudi
 
     class Processing
 
-      extend Forwardable
       include StateList
 
       attr_accessor :controller, :source
-
-      def_delegator :controller, :ports
-      def_delegator :source, :write_register
-      def_delegator :source, :clear_register
-      def_delegator :source, :interrupt_block
 
       class << self
 
@@ -48,6 +41,22 @@ module Raudi
 
       def pins
         ports.map(&:pins).flatten
+      end
+
+      def action_source(action_name)
+        action_name = "#{action_name}_action"
+        begin
+          eval action_name
+        rescue
+          ''
+        end
+      end
+
+      def method_missing(method_name, *args, &block)
+        [source, controller].each do |delegate|
+          return delegate.send(method_name, *args, &block) if delegate.respond_to?(method_name)
+        end
+        super
       end
 
       private
