@@ -37,6 +37,14 @@ module Raudi
         end
       end
 
+      def pc_interrupt(*args)
+        set_interrupt(*args) do |arg|
+          pin = get_pin(arg)
+          pin.pcint!
+          pin.port.add_interrupt :pcint
+        end
+      end
+
       def output(*args)
         set_pin_mode(*args){|pin| pin.output!}
       end

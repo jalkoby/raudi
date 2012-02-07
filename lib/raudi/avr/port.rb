@@ -1,27 +1,21 @@
 require 'raudi/avr/info'
 require 'raudi/avr/pin'
-require 'raudi/avr/port_source'
-require 'raudi/avr/with_source'
+require 'raudi/avr/state_list'
 
 module Raudi
 
   module AVR
     
     class Port
+      
+      include StateList
 
-      include WithSource
+      attr_accessor :name, :pins, :interrupts, :pc_number
 
-      attr_accessor :name, :pins, :interrupts
-
-      Info.pin_states.each do |common_state|
-        define_method "#{common_state}_pins" do
-          pins.select{|pin| pin.send("#{common_state}?")}
-        end
-      end
-
-      def initialize(name, pins)
+      def initialize(name, config)
         self.name = name.upcase
-        self.pins = pins.map{|pin_number, types|  Pin.new(self, pin_number, types)}
+        self.pins = config['pins'].map{|pin_number, types|  Pin.new(self, pin_number, types)}
+        self.pc_number= config['pc_number']
         self.interrupts = []
       end
 

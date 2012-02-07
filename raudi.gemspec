@@ -19,9 +19,12 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   # specify any dependencies here; for example:
+  # maybe in future
+  # s.add_dependency 'activesupport'
   s.add_development_dependency "rspec", '>= 2.5'
   s.add_development_dependency 'guard-rspec'
   s.add_development_dependency 'fuubar'
   s.add_development_dependency 'ruby_gntp'
+  s.add_development_dependency 'ruby-debug19'
 
 end

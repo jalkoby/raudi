@@ -1,3 +1,5 @@
+require 'ruby-debug'
+
 module SupportHelpers
 
   def klass

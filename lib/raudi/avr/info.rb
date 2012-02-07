@@ -7,7 +7,7 @@ module Raudi
       class << self
 
         def config
-          @config ||= YAML.load_config_file('configuration/avr.yml')
+          @config ||= YAML.load_file('configuration/avr.yml')
         end
 
         def method_missing(method_name, *args)
@@ -34,8 +34,8 @@ module Raudi
 
         def interrupt_event(event_name)
           list = config['interrupts']['events'][event_name.to_s]
-          raise "Undefined interrupt event - #{event_name}" unless list
-          list.map{|bit_value| bit_value == '1' ? true : false}
+          raise "Undefined interrupt event - #{event_name}" unless list.is_a?(Array)
+          list
         end
 
         private

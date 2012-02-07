@@ -1,14 +1,59 @@
 headers:
-  avr: 'boot cpufunc eeprom fuse interrupt io lock pgmspace power sfr_defs signature sleep version wdt'
-  common: 'alloca assert ctype errno inttypes math setjmp stdint stdio stdlib string'
-  util: 'atomic crc16 delay delay_basic parity setbaud twi'
+  avr: 
+    - boot
+    - cpufunc
+    - eeprom 
+    - fuse
+    - interrupt
+    - io
+    - lock
+    - pgmspace
+    - power
+    - sfr_defs
+    - signature
+    - sleep
+    - version
+    - wdt
+  common: 
+    - alloca
+    - assert
+    - ctype
+    - errno
+    - inttypes
+    - math
+    - setjmp
+    - stdint
+    - stdio
+    - stdlib
+    - string
+  util: 
+    - atomic
+    - crc16
+    - delay
+    - delay_basic
+    - parity
+    - setbaud
+    - twi
 
-gpio_states: 'input pullup output'
-specific_pin_states: 'int pcint'
+gpio_states: 
+  - input
+  - pullup
+  - output
+specific_pin_states: 
+  - int
+  - pcint
 
 interrupts:
   events:
-    rising: '1 1'
-    falling: '0 1'
-    both: '1 0'
-    low: '0 0'
+    rising: 
+      - true
+      - true
+    falling: 
+      - false
+      - true
+    both: 
+      - true
+      - false
+    low: 
+      - false
+      - false

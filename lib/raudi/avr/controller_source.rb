@@ -1,4 +1,5 @@
-require "raudi/avr/source"
+require 'raudi/avr/source'
+require 'raudi/avr/processing'
 
 module Raudi
 
@@ -9,9 +10,9 @@ module Raudi
       def to_c
         process_headers
         new_line
-        each_port { |port| code_lines port.to_c(:interrupts)}
+        generate_interrupts
         function_block(:main) do
-          each_port { |port| code_lines port.to_c}
+          generate_config
           allow_interrupt
         end
         super
@@ -22,15 +23,22 @@ module Raudi
       end
 
       def allow_interrupt
-        code_line("sei();") if controller.with_interrupt
+        code_line("sei()") if controller.with_interrupt
       end
 
       private
 
-      def each_port(&block)
-        controller.ports.each do |port|
-          block.call(port)
-        end
+      def generate_interrupts
+        return unless controller.with_interrupt
+        processings.each(&:generate_interrupts)
+      end
+
+      def generate_config
+        processings.each(&:generate_config)
+      end
+
+      def processings
+        Processing.processings.map{|klass| klass.new(controller, self)}
       end
 
     end

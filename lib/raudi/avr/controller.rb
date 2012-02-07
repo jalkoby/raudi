@@ -1,8 +1,8 @@
 require 'yaml'
+require 'forwardable'
 require 'raudi/avr/controller_proxy'
 require 'raudi/avr/controller_source'
 require 'raudi/avr/port'
-require 'raudi/avr/with_source'
 
 module Raudi
 
@@ -10,9 +10,11 @@ module Raudi
 
     class Controller
       
-      include WithSource
+      extend Forwardable
 
       attr_accessor :model_name, :headers, :ports, :with_interrupt
+      
+      def_delegator :source, :to_c
       
       def initialize(model_name)
         self.model_name = model_name
@@ -30,15 +32,19 @@ module Raudi
         end
       end
 
+      def source
+        @source ||= ControllerSource.new(self)
+      end
+
       private
 
       def load_configuration_file
         path = 'configuration'
         path << "/#{model_name}.yml"
         raise "Unknow controller model" unless File.exist?(path)
-        ports = YAML.load_config_file(path)['ports']
+        ports = YAML.load_file(path)['ports']
         raise "Internal error, configuration file is invalid" unless ports.is_a?(Hash)
-        self.ports = ports.map {|port_name, pins| Port.new(port_name, pins)}
+        self.ports = ports.map {|port_name, config| Port.new(port_name, config)}
       end
 
     end

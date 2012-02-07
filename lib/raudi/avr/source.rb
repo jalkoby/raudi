@@ -86,13 +86,28 @@ module Raudi
         "  " * indent_count 
       end
 
-      def write_bits(register_name, bits)
+      def write_register(register_name, bits)
         unless bits.empty?
-          source = register_name
+          source = register_name.to_s.upcase
           source << " |= "
-          source << bits.map{|bit| "1 << #{bit}"}.join(" | ")
+          source << join_bits(bits)
           code_line(source)
         end
+      end
+
+      def clear_register(register_name, bits)
+        unless bits.empty?
+          source = register_name.to_s.upcase
+          source << " &= "
+          source << "~("
+          source << join_bits(bits)
+          source << ")"
+          code_line(source)
+        end
+      end
+
+      def join_bits(bits)
+        bits.map{|bit| "1 << #{bit}"}.join(" | ")
       end
 
     end
