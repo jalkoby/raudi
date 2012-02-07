@@ -29,8 +29,8 @@ describe Raudi::AVR::ControllerSource do
       config.external_interrupt :d2 => :rising
       source.should include('sei();')
       source.should include('ISR(INT0_vect)')
-      source.should include('GICR |= 1 << INT0;')
-      source.should include('MCUCR |= 1 << ISC00 | 1 << ISC01;')
+      source.should include('EIMSK |= 1 << INT0;')
+      source.should include('EICRA |= 1 << ISC00 | 1 << ISC01;')
     end
 
   end

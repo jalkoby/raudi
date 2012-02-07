@@ -33,7 +33,7 @@ module Raudi
       end
 
       def process_int
-        register_name = "MCUCR"
+        register_name = "EICRA"
         bits = port.int_pins.inject([]) do |bits, pin|
           pair = Info.interrupt_event(pin.state_params)
           pair.each_with_index do |bit_set, bit_number|
@@ -43,7 +43,7 @@ module Raudi
         end
         write_bits(register_name, bits)
 
-        register_name = "GICR"
+        register_name = "EIMSK"
         bits = port.int_pins.map(&:to_c)
         write_bits(register_name, bits)
       end
