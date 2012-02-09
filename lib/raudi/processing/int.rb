@@ -1,8 +1,8 @@
 module Raudi
 
-  module AVR
+  module Processing
 
-    class IntProcessing < Processing
+    class Int < Base
 
       private
       

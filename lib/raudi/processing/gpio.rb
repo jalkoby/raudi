@@ -1,8 +1,8 @@
 module Raudi
 
-  module AVR
+  module Processing
 
-    class GpioProcessing < Processing
+    class Gpio < Base
       
       private
 

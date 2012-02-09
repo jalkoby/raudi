@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe Raudi::AVR::ControllerSource do
+describe Raudi::Source::Controller do
   
   let(:controller) { Raudi::AVR::Controller.new :atmega_328 }
-  let(:config){ Raudi::AVR::ControllerProxy.new(controller) }
+  let(:config){ Raudi::Proxy.new(controller) }
   let(:source){ controller.to_c }
 
 

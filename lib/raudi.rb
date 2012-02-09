@@ -1,5 +1,4 @@
-require 'raudi/extentions'
-require 'raudi/action_processor'
+require 'raudi/info'
 require 'raudi/avr'
 
 module Raudi

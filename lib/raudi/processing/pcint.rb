@@ -1,8 +1,8 @@
 module Raudi
 
-  module AVR
+  module Processing
 
-    class PCINTProcessing < Processing
+    class PCInt < Base
 
       private
 

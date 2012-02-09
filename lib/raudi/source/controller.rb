@@ -1,11 +1,17 @@
-require 'raudi/avr/source'
-require 'raudi/avr/processing'
+require 'raudi/source'
+require 'raudi/processing'
 
 module Raudi
 
-  module AVR
+  module Source
 
-    class ControllerSource < Source
+    class Controller < Base
+
+      attr_accessor :controller
+
+      def initialize(controller)
+        self.controller = controller
+      end
 
       def to_c
         process_headers
@@ -42,7 +48,7 @@ module Raudi
       end
 
       def processings
-        Processing.processings.map{|klass| klass.new(controller, self)}
+        Processing.list.map{|klass| klass.new(controller, self)}
       end
 
       def user_setup

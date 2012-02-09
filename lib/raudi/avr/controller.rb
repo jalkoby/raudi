@@ -1,7 +1,7 @@
 require 'yaml'
 require 'forwardable'
-require 'raudi/avr/controller_proxy'
-require 'raudi/avr/controller_source'
+require 'raudi/proxy'
+require 'raudi/source/controller'
 require 'raudi/avr/port'
 
 module Raudi
@@ -20,7 +20,7 @@ module Raudi
         self.model_name = model_name
         load_configuration_file
         self.headers = []
-        yield ControllerProxy.new(self) if block_given?
+        yield Proxy.new(self) if block_given?
         Raudi.controller = self
       end
 
@@ -33,7 +33,7 @@ module Raudi
       end
 
       def source
-        @source ||= ControllerSource.new(self)
+        @source ||= Source::Controller.new(self)
       end
 
       private

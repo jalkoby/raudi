@@ -1,30 +1,16 @@
-require 'raudi/c/variable'
-require 'raudi/c/function'
+require 'raudi/source/variable'
+require 'raudi/source/function'
 
 module Raudi
 
-  module AVR
+  module Source
     
-    class Source
+    class Base
 
-      include Raudi::C::Variable
-      include Raudi::C::Function
+      include Variable
+      include Function
 
       attr_accessor :source_text, :indent_count
-
-      def self.inherited(sub_class)
-        words = sub_class.to_s.split('::')
-        object_name = words.last.gsub('Source', '').underscore
-        sub_class.class_eval do
-
-          attr_accessor object_name.to_sym
-
-          define_method :initialize do |source_object|
-            self.send("#{object_name}=", source_object)
-          end
-
-        end
-      end
 
       def new_line
         "\n"

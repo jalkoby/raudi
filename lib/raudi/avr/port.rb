@@ -1,6 +1,5 @@
-require 'raudi/avr/info'
 require 'raudi/avr/pin'
-require 'raudi/avr/state_list'
+require 'raudi/state_list'
 
 module Raudi
 

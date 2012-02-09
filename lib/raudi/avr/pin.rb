@@ -1,5 +1,4 @@
 require 'forwardable'
-require 'raudi/avr/info'
 require "raudi/avr/pin_states"
 
 module Raudi

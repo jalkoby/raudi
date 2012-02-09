@@ -1,27 +1,27 @@
-require 'raudi/avr/state_list'
+require 'raudi/state_list'
 
 module Raudi
 
-  module AVR
+  module Processing
 
-    class Processing
+    class << self
 
-      include StateList
+      attr_accessor :list
+
+      def list
+        @list ||= []
+      end
+
+    end
+
+    class Base
+
+      include Raudi::StateList
 
       attr_accessor :controller, :source
 
-      class << self
-
-        attr_accessor :processings
-
-        def processings
-          @processings ||= []
-        end
-
-        def inherited(klass)
-          processings << klass
-        end
-      
+      def self.inherited(klass)
+        Processing.list << klass
       end
 
       def initialize(controller, source)
@@ -74,4 +74,4 @@ module Raudi
 
 end
 
-Dir[File.dirname(__FILE__) + '/*_processing.rb'].each{ |file_name| require file_name }
+Dir[File.dirname(__FILE__) + '/processing/*.rb'].each{ |file_name| require file_name }
