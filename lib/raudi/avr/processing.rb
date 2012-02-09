@@ -43,15 +43,6 @@ module Raudi
         ports.map(&:pins).flatten
       end
 
-      def action_source(action_name)
-        action_name = "#{action_name}_action"
-        begin
-          eval action_name
-        rescue
-          ''
-        end
-      end
-
       def method_missing(method_name, *args, &block)
         [source, controller].each do |delegate|
           return delegate.send(method_name, *args, &block) if delegate.respond_to?(method_name)

@@ -86,6 +86,16 @@ module Raudi
         "  " * indent_count 
       end
 
+      def insert_action(action_name)
+        action_name = "#{action_name}_action"
+        code = begin
+          eval(action_name)
+        rescue
+          ''
+        end
+        code_lines code
+      end
+
       def write_register(register_name, bits)
         unless bits.empty?
           source = register_name.to_s.upcase

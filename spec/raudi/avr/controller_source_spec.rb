@@ -6,6 +6,16 @@ describe Raudi::AVR::ControllerSource do
   let(:config){ Raudi::AVR::ControllerProxy.new(controller) }
   let(:source){ controller.to_c }
 
+
+  it 'should warp setup block' do
+    source.should include("int delay_time = 500;")
+  end
+
+  it 'should warp main block' do
+    source.should include("_delay_ms(delay_time);")
+    source.should include("toggle_pin(PIN3);")
+  end
+
   context 'generate pgio config' do
     
     it 'output pins' do
