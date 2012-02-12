@@ -2,7 +2,7 @@ module Raudi
 
   module Processing
 
-    class Gpio < Base
+    class GPIO < Base
       
       private
 

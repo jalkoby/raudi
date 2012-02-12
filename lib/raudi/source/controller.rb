@@ -1,5 +1,6 @@
-require 'raudi/source'
 require 'raudi/processing'
+require 'raudi/source'
+require 'raudi/source/interrupt'
 
 module Raudi
 
@@ -7,16 +8,25 @@ module Raudi
 
     class Controller < Base
 
+      include Interrupt
+
       attr_accessor :controller
 
       def initialize(controller)
         self.controller = controller
       end
 
-      def to_c
-        process_headers
+      def generate_headers
+        controller.headers.each do |name| 
+          code_line "#include <#{name}.h>", skip_semicolon: true
+        end
         new_line
+      end
+
+      def to_c
+        generate_headers
         generate_interrupts
+        
         function_block(:main) do
           generate_config
           user_setup
@@ -25,23 +35,11 @@ module Raudi
             user_main
           end
         end
-        super
-      end
 
-      def process_headers
-        controller.headers.each{ |name| code_line "#include <#{name}.h>", skip_semicolon: true }
-      end
-
-      def allow_interrupt
-        code_line("sei()") if controller.with_interrupt
+        source_text
       end
 
       private
-
-      def generate_interrupts
-        return unless controller.with_interrupt
-        processings.each(&:generate_interrupts)
-      end
 
       def generate_config
         processings.each(&:generate_config)

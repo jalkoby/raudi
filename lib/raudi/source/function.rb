@@ -11,17 +11,17 @@ module Raudi
 
       def generate_function_header(name, params = {})
         source = ''
-        source << process_result(name, params[:result])
+        source << generate_result(name, params[:result])
       end
 
-      def process_result(name, result = nil)
+      def generate_result(name, result = nil)
         if result.is_a?(Hash)
           result[:type] ||= :void
           result[:name] = name
-          process_variable result
+          generate_variable result
         else
           result ||= :void
-          process_variable name: name, type: result
+          generate_variable name: name, type: result
         end
       end
 

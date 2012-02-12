@@ -1,3 +1,5 @@
+frequency: 16000000
+max_frequency: 20000000
 ports:
   b:
     pc_number: 0
@@ -19,7 +21,7 @@ ports:
       7: 
         - pcint_7
   c:
-    pc_mask: 1
+    pc_number: 1
     pins:
       0: 
         - pcint_8
@@ -36,7 +38,7 @@ ports:
       6: 
         - pcint_14
   d:
-    pc_mask: 2
+    pc_number: 2
     pins:
       0: 
         - pcint_16
@@ -50,8 +52,10 @@ ports:
         - pcint_19
       4: 
         - pcint_20
+        - timer_0
       5: 
         - pcint_21
+        - timer_1
       6: 
         - pcint_22
       7: 

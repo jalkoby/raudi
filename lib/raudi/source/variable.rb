@@ -4,7 +4,7 @@ module Raudi
 
     module Variable
       
-      def process_variable(variable)
+      def generate_variable(variable)
         source = ""
 
         [:static, :const, :unsigned].each do |prefix|

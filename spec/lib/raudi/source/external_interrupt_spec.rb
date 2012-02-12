@@ -1,38 +1,7 @@
 require 'spec_helper'
 
-describe Raudi::Source::Controller do
+describe 'Generate external interrupt code' do
   
-  let(:controller) { Raudi::AVR::Controller.new :atmega_328 }
-  let(:config){ Raudi::Proxy.new(controller) }
-  let(:source){ controller.to_c }
-
-
-  it 'should warp setup block' do
-    source.should include("int delay_time = 500;")
-  end
-
-  it 'should warp main block' do
-    source.should include("_delay_ms(delay_time);")
-    source.should include("toggle_pin(PIN3);")
-  end
-
-  context 'generate pgio config' do
-    
-    it 'output pins' do
-      config.output :b2, :c3, :b5, :d2
-      source.should include("DDRC |= 1 << 3;")
-      source.should include("DDRB |= 1 << 2 | 1 << 5;")
-      source.should include("DDRD |= 1 << 2;")
-    end
-
-    it 'pullup pins' do
-      config.pullup :c3, :b3, :b2, :b4
-      source.should include("PORTC |= 1 << 3;")
-      source.should include("PORTB |= 1 << 2 | 1 << 3 | 1 << 4;")
-    end
-
-  end
-
   context 'external interrupt' do
 
     it 'rising' do
@@ -65,12 +34,21 @@ describe Raudi::Source::Controller do
 
   context 'pin change interrupt' do
 
-    it 'for port b 1 and 5 bits' do
+    it 'for pins b1 and b5' do
       config.pc_interrupt :b1, :b5
       source.should include("sei();")
       source.should include('PCMSK0 |= 1 << PCINT1 | 1 << PCINT5;')
       source.should include('ISR(PCINT0_vect)')
       source.should include('PCICR |= 1 << PCIE0;')
+    end
+
+    it 'pin c3 and d5' do
+      config.pc_interrupt :c3, :d5
+      source.should include('PCMSK1 |= 1 << PCINT11;')
+      source.should include('PCMSK2 |= 1 << PCINT21;')
+      source.should include('ISR(PCINT1_vect)')
+      source.should include('ISR(PCINT2_vect)')
+      source.should include('PCICR |= 1 << PCIE1 | 1 << PCIE2;')
     end
 
   end

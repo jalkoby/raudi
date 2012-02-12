@@ -42,6 +42,7 @@ gpio_states:
 specific_pin_states: 
   - int
   - pcint
+  - timer
 
 interrupts:
   events:

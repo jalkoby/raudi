@@ -7,6 +7,7 @@ module Raudi
       DELIMITER = '_'
       
       def self.included(klass)
+        
         klass.class_eval do
 
           attr_accessor :states, :state, :state_params
@@ -33,7 +34,13 @@ module Raudi
             end
 
           end
+
         end
+
+      end
+
+      def state_number
+        state.split(DELIMITER).last
       end
 
       def to_c
@@ -42,10 +49,6 @@ module Raudi
         else
           state.to_s.gsub(DELIMITER, '').upcase
         end
-      end
-
-      def state_number
-        state.split(DELIMITER).last
       end
 
       private

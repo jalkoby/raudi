@@ -1,8 +1,5 @@
-require 'yaml'
-require 'forwardable'
-require 'raudi/proxy'
+require 'raudi/proxy/controller'
 require 'raudi/source/controller'
-require 'raudi/avr/port'
 
 module Raudi
 
@@ -16,11 +13,11 @@ module Raudi
       
       def_delegator :source, :to_c
       
-      def initialize(model_name)
+      def initialize(model_name, &block)
         self.model_name = model_name
-        load_configuration_file
+        load_ports
         self.headers = []
-        yield Proxy.new(self) if block_given?
+        Proxy::Controller.new(self, &block) if block_given?
         Raudi.controller = self
       end
 
@@ -38,13 +35,25 @@ module Raudi
 
       private
 
-      def load_configuration_file
-        path = 'configuration'
-        path << "/#{model_name}.yml"
-        raise "Unknow controller model" unless File.exist?(path)
-        ports = YAML.load_file(path)['ports']
-        raise "Internal error, configuration file is invalid" unless ports.is_a?(Hash)
-        self.ports = ports.map {|port_name, config| Port.new(port_name, config)}
+      def config
+        @config ||= begin
+          path = 'configuration'
+          path << "/#{model_name}.yml"
+          raise "Unknow controller model" unless File.exist?(path)
+          YAML.load_file(path)
+        end
+      end
+
+      def load_ports
+        self.ports = config['ports'].map {|port_name, config| Port.new(port_name, config)}
+      end
+
+      def method_missing(method_name, *args, &block)
+        if value = config[method_name.to_s]
+          value
+        else
+          super
+        end
       end
 
     end
