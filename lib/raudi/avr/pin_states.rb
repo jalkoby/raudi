@@ -15,7 +15,7 @@ module Raudi
           Info.pin_states.each do |pin_state|
 
             define_method :get_state do |pin_state|
-              states.detect{|state| state =~ Regexp.new("\\A#{pin_state}")}
+              states.detect { |state| state =~ Regexp.new("\\A(#{pin_state})(_\d+)?") }
             end
 
             define_method :get_state! do |pin_state|
@@ -29,8 +29,16 @@ module Raudi
               self.state_params = args.first
             end
 
-            define_method "#{pin_state}?" do
+            define_method "#{pin_state}?" do |*args|
               self.state == get_state(pin_state)
+            end
+
+            define_method "can_be_#{pin_state}?" do |*args|
+              return unless full_state = get_state(pin_state)
+              if(number = args.first)
+                return unless full_state[number.to_s]
+              end
+              true
             end
 
           end

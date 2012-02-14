@@ -38,4 +38,33 @@ describe Raudi::AVR::Pin do
 
   end
 
+  context 'state checks' do
+
+    let(:pin) { Raudi::AVR::Pin.new(port, 3, ['counter_1', 'eint_0', 'pcint_4']) }
+
+    it 'should be input by default' do
+      pin.should be_input
+    end
+
+    it 'can be pullup by default' do
+      pin.can_be_pullup?.should be_true
+      pin.pullup!
+      pin.should be_pullup
+    end
+
+    it 'can be output by default' do
+      pin.can_be_output?.should be_true
+      pin.output!
+      pin.should be_output
+    end
+
+    it 'can be counter' do
+      pin.can_be_counter?.should be_true
+      pin.can_be_counter?(2).should be_false
+      pin.counter!
+      pin.should be_counter
+    end
+
+  end
+
 end

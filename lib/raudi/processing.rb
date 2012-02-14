@@ -1,5 +1,3 @@
-require 'raudi/state_list'
-
 module Raudi
 
   module Processing
@@ -15,8 +13,6 @@ module Raudi
     end
 
     class Base
-
-      include Raudi::StateList
 
       attr_accessor :controller, :source
 
@@ -37,10 +33,6 @@ module Raudi
       def generate_config
         return unless can_process?
         config
-      end
-
-      def pins
-        ports.map(&:pins).flatten
       end
 
       def method_missing(method_name, *args, &block)

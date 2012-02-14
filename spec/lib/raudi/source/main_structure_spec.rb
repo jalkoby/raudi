@@ -12,7 +12,7 @@ describe 'Generation main structure' do
   end
 
   it 'should allow interrupt' do
-    controller.with_interrupt = true
+    controller.interrupt = true
     source.should include('sei();')
   end
 

@@ -1,5 +1,6 @@
 require 'raudi/proxy/controller'
 require 'raudi/source/controller'
+require 'raudi/state_list'
 
 module Raudi
 
@@ -8,14 +9,16 @@ module Raudi
     class Controller
       
       extend Forwardable
+      include Raudi::StateList
 
-      attr_accessor :model_name, :headers, :ports, :with_interrupt
+      attr_accessor :model_name, :headers, :ports, :timers, :interrupt
       
       def_delegator :source, :to_c
       
       def initialize(model_name, &block)
         self.model_name = model_name
         load_ports
+        load_timers
         self.headers = []
         Proxy::Controller.new(self, &block) if block_given?
         Raudi.controller = self
@@ -27,6 +30,10 @@ module Raudi
         else
           @ports
         end
+      end
+
+      def pins
+        ports.map(&:pins).flatten
       end
 
       def source
@@ -46,6 +53,10 @@ module Raudi
 
       def load_ports
         self.ports = config['ports'].map {|port_name, config| Port.new(port_name, config)}
+      end
+
+      def load_timers
+        self.timers = config['timers'].map{|timer_name, config| Timer.new(timer_name, config)}
       end
 
       def method_missing(method_name, *args, &block)

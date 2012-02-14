@@ -5,7 +5,7 @@ module Raudi
     module Interrupt
       
       def allow_interrupt
-        code_line("sei()") if controller.with_interrupt
+        code_line("sei()") if controller.interrupt
       end
 
       def interrupt_block(vector_name, &block)
@@ -15,7 +15,7 @@ module Raudi
       end
 
       def generate_interrupts
-        return unless controller.with_interrupt
+        return unless controller.interrupt
         processings.each(&:generate_interrupts)
       end
 

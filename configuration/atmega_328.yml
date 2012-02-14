@@ -52,11 +52,18 @@ ports:
         - pcint_19
       4: 
         - pcint_20
-        - timer_0
+        - counter_0
       5: 
         - pcint_21
-        - timer_1
+        - counter_1
       6: 
         - pcint_22
       7: 
         - pcint_23
+timers:
+  timer_0:
+    length: 8
+  timer_1:
+    length: 16
+  timer_2:
+    length: 8

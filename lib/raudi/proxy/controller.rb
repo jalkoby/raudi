@@ -45,7 +45,7 @@ module Raudi
 
       def set_interrupt(*args)
         headers :interrupt
-        controller.with_interrupt = true
+        controller.interrupt = true
         return if args.empty? or !block_given?
         args.each do |arg|
           yield arg
