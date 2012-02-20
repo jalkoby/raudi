@@ -23,7 +23,7 @@ module Raudi
 
       def pins(pin_number = nil)
         if pin_number
-          pins.detect{|pin| pin.number == pin_number.to_i}
+          @pins.detect{|pin| pin.number == pin_number.to_i}
         else
           @pins
         end

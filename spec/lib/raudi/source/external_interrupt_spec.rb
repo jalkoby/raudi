@@ -18,7 +18,6 @@ describe 'Generate external interrupt code' do
       config.external_interrupt :d3 => :falling
       source.should include('EIMSK |= 1 << INT1;')
       source.should include('EICRA |= 1 << ISC11;')
-      source.should include('EICRA &= ~(1 << ISC10);')
     end
 
     it 'define two interrupts' do
@@ -27,7 +26,6 @@ describe 'Generate external interrupt code' do
       source.should include('ISR(INT1_vect)')
       source.should include('EIMSK |= 1 << INT0 | 1 << INT1;')
       source.should include('EICRA |= 1 << ISC00 | 1 << ISC11;')
-      source.should include('EICRA &= ~(1 << ISC01 | 1 << ISC10);')
     end
 
   end

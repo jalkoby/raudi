@@ -32,7 +32,7 @@ module Raudi
 
       def interrupt_event(event_name)
         list = config['interrupts']['events'][event_name.to_s]
-        raise "Undefined interrupt event - #{event_name}" unless list.is_a?(Array)
+        raise "Undefined interrupt event - #{event_name}" unless list.is_a?(Fixnum)
         list
       end
 

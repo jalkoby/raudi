@@ -1,6 +1,6 @@
 require 'forwardable'
 require 'yaml'
-
+require 'raudi/core_ext'
 require 'raudi/info'
 require 'raudi/avr'
 

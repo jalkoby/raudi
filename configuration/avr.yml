@@ -46,15 +46,16 @@ specific_pin_states:
 
 interrupts:
   events:
-    rising: 
-      - true
-      - true
-    falling: 
-      - false
-      - true
-    both: 
-      - true
-      - false
-    low: 
-      - false
-      - false
+    low: 0
+    both: 1
+    falling: 2
+    rising: 3
+timers:
+  prescale:
+    1: 1
+    8: 2
+    64: 3
+    256: 4
+    1024: 5
+    falling: 6
+    rising: 7

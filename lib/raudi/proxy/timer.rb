@@ -6,22 +6,28 @@ module Raudi
 
       def activate_timer(number, params = {})
         timer = get_tc_devise(number)
-        timer.prescale = prepare_prescale(params[:prescale])
+        timer.prescale = prepare_prescale(params[:prescale]) || 1
         base_tc_setting(timer, params)
       end
 
       def activate_counter(number, params = {})
         counter = get_tc_devise(number)
-        counter.counter = get_counter_pin(number)
+        counter.counter = get_counter_pin(number) 
+        counter.prescale = prepare_prescale(params[:mode].to_s) || 6
         base_tc_setting(counter, params)
       end
 
       private
 
       def base_tc_setting(devise, params)
-        if params[:interrupt]
-          devise.interrupt = true
+        if params[:overflow]
+          devise.overflow = true
           set_interrupt          
+        end
+        [:a, :b].each do |number|
+          if value = params[number]
+            devise.send("#{number}=", value) if devise.range.include?(value)
+          end
         end
         devise.active = true
       end
@@ -40,7 +46,7 @@ module Raudi
       end
 
       def prepare_prescale(value)
-        [1, 8, 64, 256, 1024].include?(value) ? value : 1
+        Info.timers['prescale'][value]
       end
 
       def raise_timer_error(number, message)
