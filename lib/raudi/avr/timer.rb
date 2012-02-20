@@ -4,11 +4,22 @@ module Raudi
 
     class Timer
 
-      attr_accessor :a, :active, :b, :counter, :overflow, :name, :length, :prescale
+      attr_accessor :active, :counter, :interrupt, :mode, :mode_params, :name, :length, :prescale
+
+      [:default, :ctc].each do |timer_mode|
+        define_method("#{timer_mode}?") do
+          self.mode == timer_mode
+        end
+
+        define_method("#{timer_mode}!") do
+          self.mode = timer_mode
+        end
+      end
 
       def initialize(name, params)
         self.name = name
         self.length = params['length']
+        self.mode = :default
       end
 
       def number
@@ -16,11 +27,19 @@ module Raudi
       end
 
       def range
-        0..max_number
+        0...max_number
       end
 
       def max_number
         2**length
+      end
+
+      def mode=(new_mode)
+        if @mode != new_mode
+          @mode = new_mode
+          self.mode_params = {}
+          self.interrupt = nil
+        end
       end
 
     end

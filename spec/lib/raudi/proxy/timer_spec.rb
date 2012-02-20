@@ -26,11 +26,21 @@ describe 'Proxy for timer/counter' do
     end
 
     it 'set timer with interrupt' do
-      config.activate_timer 1, :overflow => true
+      config.activate_timer 1, :interrupt => true
       controller.interrupt.should be_true
       timer = controller.timers[1]
-      timer.overflow.should be_true
       controller.headers.should include('avr/interrupt')
+    end
+
+  end
+
+  context 'ctc mode' do
+
+    it 'set to ctc a' do
+      config.activate_timer 2, :a => 123
+      timer = controller.timers[2]
+      timer.mode.should == :ctc
+      timer.mode_params[:a].should == 123
     end
 
   end

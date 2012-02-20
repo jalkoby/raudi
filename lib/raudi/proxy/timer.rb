@@ -20,14 +20,15 @@ module Raudi
       private
 
       def base_tc_setting(devise, params)
-        if params[:overflow]
-          devise.overflow = true
-          set_interrupt          
-        end
         [:a, :b].each do |number|
-          if value = params[number]
-            devise.send("#{number}=", value) if devise.range.include?(value)
+          if value = params[number] and devise.range.include?(value)
+            devise.ctc!
+            devise.mode_params[number] = value
           end
+        end
+        if params[:interrupt]
+          devise.interrupt = true
+          set_interrupt       
         end
         devise.active = true
       end
