@@ -6,7 +6,7 @@ module Raudi
 
       attr_accessor :active, :counter, :interrupt, :mode, :mode_params, :name, :length, :prescale
 
-      [:default, :ctc].each do |timer_mode|
+      [:normal, :ctc].each do |timer_mode|
         define_method("#{timer_mode}?") do
           self.mode == timer_mode
         end
@@ -19,7 +19,7 @@ module Raudi
       def initialize(name, params)
         self.name = name
         self.length = params['length']
-        self.mode = :default
+        self.normal!
       end
 
       def number

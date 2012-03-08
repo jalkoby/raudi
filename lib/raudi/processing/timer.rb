@@ -22,7 +22,7 @@ module Raudi
           next unless timer.interrupt
           prefix = "timer#{timer.number}"
           case
-          when timer.default?
+          when timer.normal?
             interrupt_block vector_name(prefix, "ovf") do
 
             end
@@ -43,9 +43,10 @@ module Raudi
         write_register(register_name, bits)
       end
 
-      def set_timer_mask(timer)      
+      def set_timer_mask(timer)
+        return unless timer.interrupt   
         case
-        when timer.default?
+        when timer.normal?
           register_name = "TIMSK#{timer.number}"
           bits = ["TOIE#{timer.number}"]
           write_register(register_name, bits)

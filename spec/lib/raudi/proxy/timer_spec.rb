@@ -39,8 +39,15 @@ describe 'Proxy for timer/counter' do
     it 'set to ctc a' do
       config.activate_timer 2, :a => 123
       timer = controller.timers[2]
-      timer.mode.should == :ctc
+      timer.should be_ctc
       timer.mode_params[:a].should == 123
+    end
+
+    it 'set to ctc b that overflow' do
+      config.activate_timer 0, :b => 260
+      timer = controller.timers[0]
+      timer.should be_normal
+      timer.mode_params.should == {}
     end
 
   end

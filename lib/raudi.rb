@@ -1,5 +1,6 @@
 require 'forwardable'
 require 'yaml'
+require 'raudi/action_processor'
 require 'raudi/core_ext'
 require 'raudi/info'
 require 'raudi/avr'
@@ -20,6 +21,10 @@ module Raudi
       raise 'Create configuration file config.rb before' unless File.exists?(absolute_config_path)
       raise 'Create actions file actions.raudi before' unless File.exists?(absolute_actions_path)
       load(absolute_config_path)
+    end
+
+    def action
+      @action ||= Raudi::ActionProcessor.new
     end
 
   end

@@ -29,10 +29,10 @@ module Raudi
         
         function_block(:main) do
           generate_config
-          user_setup
+          insert_action "SETUP"
           allow_interrupt
           code_block('while(1)') do
-            user_main
+            insert_action "MAIN"
           end
         end
 
@@ -47,14 +47,6 @@ module Raudi
 
       def processings
         Processing.list.map{|klass| klass.new(controller, self)}
-      end
-
-      def user_setup
-        insert_action "SETUP"
-      end
-
-      def user_main
-        insert_action "MAIN"
       end
 
     end
