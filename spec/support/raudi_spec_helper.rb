@@ -1,7 +1,7 @@
 module RaudiSpecHelper
 
   def self.included(klass)
-    klass.let(:controller) { Raudi::AVR::Controller.new :atmega_328 }
+    klass.let(:controller) { Raudi::AVR::Controller.new(:atmega_328) }
     klass.let(:config){ Raudi::Proxy::Controller.new(controller) }
     klass.let(:source){ controller.to_c }
   end
@@ -10,8 +10,9 @@ module RaudiSpecHelper
     described_class
   end
 
-  def get_pin(port, pin)
-    controller.ports(port).pins(pin)
+  def get_pin(port, pin, custom_controller = nil)
+    kontroller = custom_controller ? custom_controller : controller
+    kontroller.ports(port).pins(pin)
   end
 
 end

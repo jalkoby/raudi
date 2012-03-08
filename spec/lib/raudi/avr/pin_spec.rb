@@ -3,13 +3,13 @@ require 'spec_helper'
 describe Raudi::AVR::Pin do
 
   let(:port){ Raudi::AVR::Port.new("C", {'pins' => []}) }
-  
+
   context 'generate c presentation' do
-    
+
     context 'as gpio' do
 
       let(:pin) { Raudi::AVR::Pin.new(port, 3, []) }
-      
+
       it 'input' do
         pin.to_c.should == "PINC3"
         pin.should be_input
@@ -40,7 +40,7 @@ describe Raudi::AVR::Pin do
 
   context 'state checks' do
 
-    let(:pin) { Raudi::AVR::Pin.new(port, 3, ['counter_1', 'eint_0', 'pcint_4']) }
+    let(:pin) { Raudi::AVR::Pin.new(port, 3, ['timer_1', 'eint_0', 'pcint_4']) }
 
     it 'should be input by default' do
       pin.should be_input
@@ -58,11 +58,11 @@ describe Raudi::AVR::Pin do
       pin.should be_output
     end
 
-    it 'can be counter' do
-      pin.can_be_counter?.should be_true
-      pin.can_be_counter?(2).should be_false
-      pin.counter!
-      pin.should be_counter
+    it 'can be timer' do
+      pin.can_be_timer?.should be_true
+      pin.can_be_timer?(2).should be_false
+      pin.timer!
+      pin.should be_timer
     end
 
   end

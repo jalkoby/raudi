@@ -59,7 +59,7 @@ describe 'Proxy for timer/counter' do
       controller.timers[0].counter.should be
       controller.timers[0].prescale.should == 6
       pin = get_pin(:d, 4)
-      pin.should be_counter
+      pin.should be_timer
     end
 
   end

@@ -8,17 +8,17 @@ module Raudi
   module Proxy
 
     class Controller
-      
+
       include ExternalInterrupt
       include GPIO
       include Headers
       include Timer
-      
+
       attr_accessor :controller
 
-      def initialize(controller)
+      def initialize(controller, &block)
         self.controller = controller
-        yield(self) if block_given?
+        instance_eval(&block) if block_given?
       end
 
       private

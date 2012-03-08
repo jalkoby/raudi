@@ -1,0 +1,5 @@
+Raudi.configure :atmega_328 do
+  output :b3, :c3
+  pullup :c2, :d6
+  pc_interrupt :d1, :d2
+end

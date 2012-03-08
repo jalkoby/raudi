@@ -7,7 +7,7 @@ require 'raudi/source/function'
 module Raudi
 
   module Source
-    
+
     class Base
 
       include Action
@@ -30,7 +30,7 @@ module Raudi
       end
 
       def new_line
-        "\n"
+        "\r\n"
       end
 
       def reset_source_text

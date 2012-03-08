@@ -4,61 +4,61 @@ ports:
   b:
     pc_number: 0
     pins:
-      0: 
+      0:
         - pcint_0
-      1: 
+      1:
         - pcint_1
-      2: 
+      2:
         - pcint_2
-      3: 
+      3:
         - pcint_3
-      4: 
+      4:
         - pcint_4
-      5: 
+      5:
         - pcint_5
-      6: 
+      6:
         - pcint_6
-      7: 
+      7:
         - pcint_7
   c:
     pc_number: 1
     pins:
-      0: 
+      0:
         - pcint_8
-      1: 
+      1:
         - pcint_9
-      2: 
+      2:
         - pcint_10
-      3: 
+      3:
         - pcint_11
-      4: 
+      4:
         - pcint_12
-      5: 
+      5:
         - pcint_13
-      6: 
+      6:
         - pcint_14
   d:
     pc_number: 2
     pins:
-      0: 
+      0:
         - pcint_16
-      1: 
+      1:
         - pcint_17
-      2: 
-        - int_0 
+      2:
+        - int_0
         - pcint_18
-      3: 
-        - int_1 
+      3:
+        - int_1
         - pcint_19
-      4: 
+      4:
         - pcint_20
-        - counter_0
-      5: 
+        - timer_0
+      5:
         - pcint_21
-        - counter_1
-      6: 
+        - timer_1
+      6:
         - pcint_22
-      7: 
+      7:
         - pcint_23
 timers:
   timer_0:

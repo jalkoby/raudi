@@ -3,7 +3,7 @@ module Raudi
   module Source
 
     module Interrupt
-      
+
       def allow_interrupt
         code_line("sei()") if controller.interrupt
       end

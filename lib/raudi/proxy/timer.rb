@@ -12,7 +12,7 @@ module Raudi
 
       def activate_counter(number, params = {})
         counter = get_tc_devise(number)
-        counter.counter = get_counter_pin(number) 
+        counter.counter = get_counter_pin(number)
         counter.prescale = prepare_prescale(params[:mode].to_s) || 6
         base_tc_setting(counter, params)
       end
@@ -28,15 +28,15 @@ module Raudi
         end
         if params[:interrupt]
           devise.interrupt = true
-          set_interrupt       
+          set_interrupt
         end
         devise.active = true
       end
 
       def get_counter_pin(number)
-        pin = controller.pins.detect { |pin| pin.can_be_counter?(number) }
-        raise_timer_error(number, "can be counter") unless pin
-        pin.counter!
+        pin = controller.pins.detect { |pin| pin.can_be_timer?(number) }
+        raise_timer_error(number, "can be timer pin") unless pin
+        pin.timer!
         pin
       end
 
@@ -53,7 +53,7 @@ module Raudi
       def raise_timer_error(number, message)
         raise "Timer/Counter #{number} #{message} in controller #{controller.model_name}"
       end
-      
+
     end
 
   end

@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+begin
+  require 'raudi'
+rescue LoadError
+  require 'rubygems'
+  require 'raudi'
+end
+
+puts %Q{
+Usage:
+  raudi source_file.raudi [options]
+
+Options:
+  -o, [--output] # Set output file
+
+} unless Raudi.process(*ARGV)

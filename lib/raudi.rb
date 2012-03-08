@@ -15,16 +15,36 @@ module Raudi
       "0.0.1"
     end
 
-    def generate(config_file, actions_file)
-      absolute_config_path = File.expand_path(config_file)
-      absolute_actions_path = File.expand_path(actions_file)
-      raise 'Create configuration file config.rb before' unless File.exists?(absolute_config_path)
-      raise 'Create actions file actions.raudi before' unless File.exists?(absolute_actions_path)
-      load(absolute_config_path)
+    def configure(model_name, &block)
+      Raudi::AVR::Controller.new(model_name, &block)
     end
 
     def action
       @action ||= Raudi::ActionProcessor.new
+    end
+
+    def process(*args)
+      return unless filename = check_filename(args.first)
+      begin
+        load filename
+        if source = controller.to_c
+          output_filename = File.basename(filename, '.raudi') + '.c'
+          File.open(output_filename, 'w') {|f| f.write(source) }
+          return true
+        end
+      rescue Exception => e
+        puts e.message
+      end
+      false
+    end
+
+    private
+
+    def check_filename(filename)
+      return unless filename
+      return unless File.exists?(filename)
+      return unless filename =~ /.*\.raudi$/
+      filename
     end
 
   end

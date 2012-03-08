@@ -1,8 +1,8 @@
 headers:
-  avr: 
+  avr:
     - boot
     - cpufunc
-    - eeprom 
+    - eeprom
     - fuse
     - interrupt
     - io
@@ -14,7 +14,7 @@ headers:
     - sleep
     - version
     - wdt
-  common: 
+  common:
     - alloca
     - assert
     - ctype
@@ -26,7 +26,7 @@ headers:
     - stdio
     - stdlib
     - string
-  util: 
+  util:
     - atomic
     - crc16
     - delay
@@ -35,14 +35,14 @@ headers:
     - setbaud
     - twi
 
-gpio_states: 
+gpio_states:
   - input
   - pullup
   - output
-specific_pin_states: 
+specific_pin_states:
   - int
   - pcint
-  - counter
+  - timer
 
 interrupts:
   events:
