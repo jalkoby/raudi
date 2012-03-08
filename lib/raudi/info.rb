@@ -5,7 +5,10 @@ module Raudi
     class << self
 
       def config
-        @config ||= YAML.load_file('configuration/avr.yml')
+        @config ||= begin
+          path = File.join(File.dirname(__FILE__), '../../', 'configuration/avr.yml')
+          YAML.load_file(path)
+        end
       end
 
       def method_missing(method_name, *args)

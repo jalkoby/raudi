@@ -44,8 +44,7 @@ module Raudi
 
       def config
         @config ||= begin
-          path = 'configuration'
-          path << "/#{model_name}.yml"
+          path = File.join(File.dirname(__FILE__), '/../../../configuration', "/#{model_name}.yml")
           raise "Unknow controller model" unless File.exist?(path)
           YAML.load_file(path)
         end
