@@ -54,11 +54,6 @@ module Raudi
         true
       end
 
-      def vector_name(*args)
-        vector_name = args.map(&:upcase).join('_')
-        vector_name << "_vect"
-      end
-
     end
 
   end

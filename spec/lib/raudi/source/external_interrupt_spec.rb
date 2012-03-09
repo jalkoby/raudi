@@ -1,11 +1,12 @@
 require 'spec_helper'
 
 describe 'Generate external interrupt code' do
-  
+
   context 'external interrupt' do
 
     it 'rising' do
       config.external_interrupt :d2 => :rising
+      Raudi.action[:interrupt, 0] = "int k; for(k = 0; k < 4; k++);"
       source.should include('sei();')
       source.should include('ISR(INT0_vect)')
       source.should include('EIMSK |= 1 << INT0;')

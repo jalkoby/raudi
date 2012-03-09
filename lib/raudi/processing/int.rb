@@ -5,12 +5,10 @@ module Raudi
     class Int < Base
 
       private
-      
+
       def interrupts
-        int_pins.each do |pin| 
-          interrupt_block vector_name(pin.to_c) do
-            insert_action(pin.to_c)
-          end
+        int_pins.each do |pin|
+          interrupt_block pin.to_c
         end
       end
 

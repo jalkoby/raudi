@@ -17,7 +17,7 @@ module Raudi
       end
 
       def generate_headers
-        controller.headers.each do |name| 
+        controller.headers.each do |name|
           code_line "#include <#{name}.h>", skip_semicolon: true
         end
         new_line
@@ -26,13 +26,13 @@ module Raudi
       def to_c
         generate_headers
         generate_interrupts
-        
+
         function_block(:main) do
           generate_config
-          insert_action "SETUP"
+          insert_action :setup
           allow_interrupt
           code_block('while(1)') do
-            insert_action "MAIN"
+            insert_action :main
           end
         end
 

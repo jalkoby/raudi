@@ -3,7 +3,7 @@ module Raudi
   module Processing
 
     class Timer < Base
-        
+
       private
 
       def active_timers
@@ -23,14 +23,10 @@ module Raudi
           prefix = "timer#{timer.number}"
           case
           when timer.normal?
-            interrupt_block vector_name(prefix, "ovf") do
-
-            end
+            interrupt_block(prefix, "ovf")
           when timer.ctc?
             timer.mode_params.keys.each do |register_name|
-              interrupt_block vector_name(prefix, "comp#{register_name}") do
-
-              end
+              interrupt_block(prefix, "comp#{register_name}")
             end
           end
         end
@@ -44,7 +40,7 @@ module Raudi
       end
 
       def set_timer_mask(timer)
-        return unless timer.interrupt   
+        return unless timer.interrupt
         case
         when timer.normal?
           register_name = "TIMSK#{timer.number}"

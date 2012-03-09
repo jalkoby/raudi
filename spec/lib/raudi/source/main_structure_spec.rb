@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'Generation main structure' do
-  
+
   it 'should warp setup block' do
     source.should include("int delay_time = 500;")
   end

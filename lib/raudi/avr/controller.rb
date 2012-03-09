@@ -7,19 +7,19 @@ module Raudi
   module AVR
 
     class Controller
-      
+
       extend Forwardable
       include Raudi::StateList
 
       attr_accessor :model_name, :headers, :ports, :timers, :interrupt
-      
+
       def_delegator :source, :to_c
-      
+
       def initialize(model_name, &block)
         self.model_name = model_name
         load_ports
         load_timers
-        self.headers = []
+        self.headers = ['avr/io']
         Proxy::Controller.new(self, &block) if block_given?
         Raudi.controller = self
       end

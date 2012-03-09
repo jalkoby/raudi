@@ -19,11 +19,6 @@ describe Raudi do
 
   context 'output in file' do
 
-    after :each do
-      File.exists?(@expected_file).should be_true
-      File.delete @expected_file
-    end
-
     it 'use default case' do
       Raudi.process('spec/examples/sample.raudi').should be_true
       @expected_file = 'spec/examples/sample.c'
@@ -34,6 +29,11 @@ describe Raudi do
         @expected_file = 'foo.c'
         Raudi.process('spec/examples/sample.raudi', variant, @expected_file).should be_true
       end
+    end
+
+    after :each do
+      File.exists?(@expected_file).should be_true
+      File.delete @expected_file
     end
 
   end

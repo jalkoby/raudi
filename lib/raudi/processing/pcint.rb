@@ -9,12 +9,12 @@ module Raudi
       def interrupts
         ports.each do |port|
           next unless port.pcint_present?
-          interrupt_block vector_name("PCINT#{port.pc_number}")
+          interrupt_block "PCINT#{port.pc_number}"
         end
       end
 
       def config
-        pc_ports = [] 
+        pc_ports = []
         ports.map do |port|
           next unless port.pcint_present?
           register_name = "PCMSK#{port.pc_number}"
