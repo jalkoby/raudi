@@ -24,14 +24,10 @@ module Raudi
     end
 
     def process(*args)
-      return unless filename = check_filename(args.first)
+      return unless filename = check_filename(args)
       begin
         load filename
-        if source = controller.to_c
-          output_filename = File.basename(filename, '.raudi') + '.c'
-          File.open(output_filename, 'w') {|f| f.write(source) }
-          return true
-        end
+        return write_file(filename, args)
       rescue Exception => e
         puts e.message
       end
@@ -40,11 +36,29 @@ module Raudi
 
     private
 
-    def check_filename(filename)
+    def check_filename(args)
+      filename = args.delete_at(0)
       return unless filename
       return unless File.exists?(filename)
-      return unless filename =~ /.*\.raudi$/
+      return unless filename =~ /.*\.raudi$/i
       filename
+    end
+
+    def param_alias(param)
+      {'--output' => '-o'}[param] or param
+    end
+
+    def write_file(source_path, args)
+      return unless source = controller.to_c
+      output = source_path.gsub(/\.raudi$/i, '.c')
+      args.each_with_index do |param, index|
+        next unless param_alias(param) == '-o'
+        custom_output = args[index + 1]
+        output = custom_output if custom_output
+        break
+      end
+      File.open(output, 'w') {|f| f.write(source) }
+      true
     end
 
   end
