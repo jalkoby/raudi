@@ -12,7 +12,7 @@ module Raudi
     attr_accessor :controller
 
     def version
-      "0.0.1"
+      "0.0.2"
     end
 
     def configure(model_name, &block)
@@ -63,4 +63,12 @@ module Raudi
 
   end
 
+end
+
+def action
+  Raudi.action
+end
+
+def configure(*args, &block)
+  Raudi.configure(*args, &block)
 end
